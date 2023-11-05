@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Input } from './Filter.styled';
 
 export const Filter = ({ filter, onChangeInputValue }) => {
@@ -8,8 +9,14 @@ export const Filter = ({ filter, onChangeInputValue }) => {
         type="text"
         placeholder=" Contact Name"
         value={filter}
-        onChange={e => onChangeInputValue(e.target.value)}
+        name="filter"
+        onChange={onChangeInputValue}
       />
     </div>
   );
+};
+
+Filter.propTypes = {
+  onChangeInputValue: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
 };

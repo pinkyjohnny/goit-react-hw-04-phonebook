@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   Form,
@@ -7,59 +8,56 @@ import {
   Labelsecond,
 } from './ContactForm.styled';
 
-const INITIAL_STATE = {
-  name: '',
-  number: '',
-};
+export const ContactForm = ({ onAddContact }) => {
+  const [contactData, setContactData] = useState({
+    name: '',
+    number: '',
+  });
 
-export class ContactForm extends React.Component {
-  state = INITIAL_STATE;
+  const handleInputChange = eve => {
+    setContactData({ ...contactData, [eve.target.name]: eve.target.value });
+  };
 
-  handleSubmit = e => {
-    const { name, number } = this.state;
+  const handleSubmit = e => {
     e.preventDefault();
-    this.props.onAddContact({
+    const { name, number } = contactData;
+    onAddContact({
       name,
       number,
     });
-
-    this.setState(INITIAL_STATE);
+    setContactData({ name: '', number: '' });
   };
 
-  handleInputChange = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
+  const { name, number } = contactData;
+  return (
+    <div>
+      <Form action="" onSubmit={handleSubmit}>
+        <Labelfirst>
+          Name:
+          <Input
+            onChange={handleInputChange}
+            value={name}
+            type="text"
+            name="name"
+            required
+          />
+        </Labelfirst>
+        <Labelsecond htmlFor="">
+          Number:
+          <Input
+            onChange={handleInputChange}
+            value={number}
+            type="tel"
+            name="number"
+            required
+          />
+        </Labelsecond>
+        <Button>Add contact</Button>
+      </Form>
+    </div>
+  );
+};
 
-  render() {
-    const { name, number } = this.state;
-
-    return (
-      <div>
-        <Form action="" onSubmit={this.handleSubmit}>
-          <Labelfirst htmlFor="">
-            Name:
-            <Input
-              onChange={this.handleInputChange}
-              value={name}
-              type="text"
-              name="name"
-              required
-            />
-          </Labelfirst>
-          <Labelsecond htmlFor="">
-            Number:
-            <Input
-              onChange={this.handleInputChange}
-              value={number}
-              type="tel"
-              name="number"
-              required
-            />
-          </Labelsecond>
-          <Button>Add contact</Button>
-        </Form>
-      </div>
-    );
-  }
-}
+// ContactForm.propTypes = {
+//   onAddContact: PropTypes.func.isRequired,
+// };
